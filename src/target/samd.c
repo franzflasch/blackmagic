@@ -131,6 +131,7 @@ const command_s samd_cmd_list[] = {
 /* Device Identification Register (DID) */
 #define SAMD_DID_MASK          0xff380000U
 #define SAMD_DID_CONST_VALUE   0x10000000U
+#define SAMC_DID_CONST_VALUE   0x11000000U
 #define SAMD_DID_DEVSEL_MASK   0xffU
 #define SAMD_DID_DEVSEL_POS    0U
 #define SAMD_DID_REVISION_MASK 0x0fU
@@ -507,7 +508,8 @@ bool samd_probe(target_s *t)
 	const uint32_t did = target_mem_read32(t, SAMD_DSU_DID);
 
 	/* If the Device ID matches */
-	if ((did & SAMD_DID_MASK) != SAMD_DID_CONST_VALUE)
+	if (((did & SAMD_DID_MASK) != SAMD_DID_CONST_VALUE) &&
+            ((did & SAMD_DID_MASK) != SAMC_DID_CONST_VALUE) )
 		return false;
 
 	samd_priv_s *priv_storage = calloc(1, sizeof(*priv_storage));
